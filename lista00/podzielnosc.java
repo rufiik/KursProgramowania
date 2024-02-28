@@ -1,5 +1,4 @@
 public class podzielnosc{
-
     public static int div(int n) {
         int maxPodzielnosc=0;
         int pomoc;
@@ -7,7 +6,6 @@ public class podzielnosc{
             if(n%i==0){
                 maxPodzielnosc=i;
             }
-
         }
     return maxPodzielnosc;
     }
@@ -20,10 +18,6 @@ public class podzielnosc{
             catch (NumberFormatException ex) {
             System.out.println(args[i] + " nie jest liczba calkowita");
             }
-            
-
         }
-     
-
     }
 }
