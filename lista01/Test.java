@@ -1,5 +1,5 @@
 class MojException extends Exception {};
-public class Test{
+public class Test {
     public static void main(String[] args) throws MojException {
         int n;
         try {
@@ -15,9 +15,9 @@ public class Test{
             System.out.println("Nieprawidlowy pierwszy argument.");
             return;
         }
-           
+        
         LiczbyPierwsze l = new LiczbyPierwsze(n);
-
+        l.liczbyP(n);
         // for(int k=2;k<=n;k++){
         //     System.out.println(l.tab[k]);
         // }

@@ -5,7 +5,11 @@ class LiczbyPierwsze{
 	bool* tab;
 	int size;
 	LiczbyPierwsze(int n){
-		tab=new bool[n+1];
+		
+    
+	}
+    int liczbyP(int n){
+        tab=new bool[n+1];
 		size=n+1;
     for (int i = 2; i <= n; i++) {
         tab[i] = true;
@@ -17,8 +21,7 @@ class LiczbyPierwsze{
                 }
             }
         }
-    
-	}
+    }
 	int liczba(int m){
         int licznik=0;
         for(int k=0;k<size;k++){
@@ -38,6 +41,7 @@ class LiczbyPierwsze{
     }	
 };
 int main(int argc, char* argv[]){
+    
     int n;
     try{
             if (argc < 2) {
@@ -56,7 +60,9 @@ int main(int argc, char* argv[]){
     catch (const string& ZlyZakres) {
         cout << ZlyZakres; 
             return 1;}
+            
     LiczbyPierwsze l(n);
+    l.liczbyP(n);
     for (int i = 2; i < argc; i++) {
             int m=0;
             try{
