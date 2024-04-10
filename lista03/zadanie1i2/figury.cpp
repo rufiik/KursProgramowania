@@ -12,7 +12,6 @@ double Kolo::obliczObwod() {
     return 2 * M_PI * promien;
 }
 
-// Implementacje metod dla klasy Pieciokat
 Pieciokat::Pieciokat(double bok) {
     std::cout << "Pieciokat" << std::endl;
     this->bok = bok;
@@ -26,7 +25,6 @@ double Pieciokat::obliczObwod() {
     return 5 * bok;
 }
 
-// Implementacje metod dla klasy Szesciokat
 Szesciokat::Szesciokat(double bok) {
     std::cout << "Szesciokat" << std::endl;
     this->bok = bok;
@@ -40,7 +38,7 @@ double Szesciokat::obliczObwod() {
     return 6 * bok;
 }
 
-// Implementacje metod dla klasy Kwadrat
+
 Kwadrat::Kwadrat(double bok) {
     std::cout << "Kwadrat" << std::endl;
     this->bok = bok;
@@ -54,7 +52,6 @@ double Kwadrat::obliczObwod() {
     return 4 * bok;
 }
 
-// Implementacje metod dla klasy Prostokat
 Prostokat::Prostokat(double bok1, double bok2) {
     std::cout << "Prostokat" << std::endl;
     this->bok1 = bok1;
@@ -69,7 +66,6 @@ double Prostokat::obliczObwod() {
     return 2 * bok1 + 2 * bok2;
 }
 
-// Implementacje metod dla klasy Romb
 Romb::Romb(double bok, double kat) {
     std::cout << "Romb" << std::endl;
     this->bok = bok;
