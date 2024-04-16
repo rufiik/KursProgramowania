@@ -16,12 +16,8 @@ public class Test{
             return;
         }
            
-        // LiczbyPierwsze l = new LiczbyPierwsze(n);
         WierszTrojkataPascala w=new WierszTrojkataPascala(n);
         w.stworz(n);
-        
-       
-
 
         for (int i = 1; i < args.length; i++) {
             int m=0;
@@ -36,7 +32,6 @@ public class Test{
                 System.out.println(m + " - Liczba spoza zakresu");
                 }
         }
-
         int j=0;
         boolean warunek=false;
         while(warunek!=true){
