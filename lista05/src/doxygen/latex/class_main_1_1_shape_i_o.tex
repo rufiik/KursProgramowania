@@ -1,0 +1,59 @@
+\doxysection{Main.\+Shape\+IO Class Reference}
+\hypertarget{class_main_1_1_shape_i_o}{}\label{class_main_1_1_shape_i_o}\index{Main.ShapeIO@{Main.ShapeIO}}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{class_main_1_1_shape_i_o_a611595719cb4788c5f5604bafad56cd8}{save\+Shapes}} (List$<$ \mbox{\hyperlink{class_shape_data}{Shape\+Data}} $>$ shapes, String filename)  throws IOException 
+\item 
+static List$<$ \mbox{\hyperlink{class_shape_data}{Shape\+Data}} $>$ \mbox{\hyperlink{class_main_1_1_shape_i_o_a6712ee5caefaf4414856b5032c235c42}{load\+Shapes}} (String filename)  throws IOException, Class\+Not\+Found\+Exception 
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Shape\+IO -\/ klasa do zapisywania i wczytywania figur 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_main_1_1_shape_i_o_a6712ee5caefaf4414856b5032c235c42}\label{class_main_1_1_shape_i_o_a6712ee5caefaf4414856b5032c235c42} 
+\index{Main.ShapeIO@{Main.ShapeIO}!loadShapes@{loadShapes}}
+\index{loadShapes@{loadShapes}!Main.ShapeIO@{Main.ShapeIO}}
+\doxysubsubsection{\texorpdfstring{loadShapes()}{loadShapes()}}
+{\footnotesize\ttfamily static List$<$ \mbox{\hyperlink{class_shape_data}{Shape\+Data}} $>$ Main.\+Shape\+IO.\+load\+Shapes (\begin{DoxyParamCaption}\item[{String}]{filename }\end{DoxyParamCaption}) throws IOException, Class\+Not\+Found\+Exception\hspace{0.3cm}{\ttfamily [static]}}
+
+load\+Shapes -\/ wczytywanie figur z pliku 
+\begin{DoxyParams}{Parameters}
+{\em filename} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+lista figur 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em IOException} & -\/ wyjatek w przypadku bledu wczytania ~\newline
+ \\
+\hline
+{\em Class\+Not\+Found\+Exception} & -\/ wyjatek w przypadku bledu wczytania ~\newline
+ \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{class_main_1_1_shape_i_o_a611595719cb4788c5f5604bafad56cd8}\label{class_main_1_1_shape_i_o_a611595719cb4788c5f5604bafad56cd8} 
+\index{Main.ShapeIO@{Main.ShapeIO}!saveShapes@{saveShapes}}
+\index{saveShapes@{saveShapes}!Main.ShapeIO@{Main.ShapeIO}}
+\doxysubsubsection{\texorpdfstring{saveShapes()}{saveShapes()}}
+{\footnotesize\ttfamily static void Main.\+Shape\+IO.\+save\+Shapes (\begin{DoxyParamCaption}\item[{List$<$ \mbox{\hyperlink{class_shape_data}{Shape\+Data}} $>$}]{shapes,  }\item[{String}]{filename }\end{DoxyParamCaption}) throws IOException\hspace{0.3cm}{\ttfamily [static]}}
+
+save\+Shapes -\/ zapisywanie figur do pliku 
+\begin{DoxyParams}{Parameters}
+{\em filename} & -\/ nazwa pliku \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em IOException} & -\/ wyjatek w przypadku bledu zapisu \\
+\hline
+\end{DoxyExceptions}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Main.\+java\end{DoxyCompactItemize}

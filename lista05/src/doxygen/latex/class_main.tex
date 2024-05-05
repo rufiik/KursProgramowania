@@ -1,0 +1,148 @@
+\doxysection{Main Class Reference}
+\hypertarget{class_main}{}\label{class_main}\index{Main@{Main}}
+Inheritance diagram for Main\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_main}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_main_1_1_shape_i_o}{Shape\+IO}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_main_a6d9ee2db320148cdd46abd77f0f5c388}{start}} (Stage stage)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{class_main_a086d08b6d65c479abee84636d1c2ca95}{main}} (String args\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Prosty edytor graficzny \begin{DoxyAuthor}{Author}
+Rafal Wochna 279752 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_main_a086d08b6d65c479abee84636d1c2ca95}\label{class_main_a086d08b6d65c479abee84636d1c2ca95} 
+\index{Main@{Main}!main@{main}}
+\index{main@{main}!Main@{Main}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily static void Main.\+main (\begin{DoxyParamCaption}\item[{String}]{args\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Klasa main startujaca aplikacje 
+\begin{DoxyParams}{Parameters}
+{\em args} & argumenty \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_main_a6d9ee2db320148cdd46abd77f0f5c388}\label{class_main_a6d9ee2db320148cdd46abd77f0f5c388} 
+\index{Main@{Main}!start@{start}}
+\index{start@{start}!Main@{Main}}
+\doxysubsubsection{\texorpdfstring{start()}{start()}}
+{\footnotesize\ttfamily void Main.\+start (\begin{DoxyParamCaption}\item[{Stage}]{stage }\end{DoxyParamCaption})}
+
+start -\/ funkcja inicjalizujaca okno 
+\begin{DoxyParams}{Parameters}
+{\em stage} & -\/ okno \\
+\hline
+\end{DoxyParams}
+Ustawienia okna 
+\begin{DoxyParams}{Parameters}
+{\em stage} & -\/ okno \\
+\hline
+{\em przyciski} & -\/ panel przyciskow \\
+\hline
+{\em button1} & -\/ przycisk do rysowania okregu \\
+\hline
+{\em button2} & -\/ przycisk do rysowania prostokata \\
+\hline
+{\em button3} & -\/ przycisk do rysowania trojkata \\
+\hline
+{\em info} & -\/ przycisk informacji \\
+\hline
+{\em drawing\+Pane} & -\/ panel do rysowania \\
+\hline
+{\em canvas} & -\/ plotno do rysowania \\
+\hline
+{\em root} & -\/ panel glowny \\
+\hline
+{\em scene} & -\/ scena \\
+\hline
+{\em slider} & -\/ slider do obrotu \\
+\hline
+{\em color\+Picker} & -\/ color\+Picker do zmiany koloru \\
+\hline
+{\em save\+Button} & -\/ przycisk zapisu \\
+\hline
+{\em load\+Button} & -\/ przycisk wczytania \\
+\hline
+{\em shape} & -\/ figura \\
+\hline
+{\em shape\+Data} & -\/ informacje o figurze\\
+\hline
+\end{DoxyParams}
+Listener do zmiany rozmiaru okna 
+\begin{DoxyParams}{Parameters}
+{\em observable} & -\/ obiekt obserwujacy \\
+\hline
+{\em old\+Value} & -\/ stara wartosc \\
+\hline
+{\em new\+Value} & -\/ nowa wartosc\\
+\hline
+\end{DoxyParams}
+Slider do obrotu figur od 0 do 360 stopni
+
+Color\+Picker do zmiany koloru figur
+
+Przyciski do zapisu i wczytania figur z pliku
+
+Zapisywanie figur do pliku filename -\/ nazwa pliku IOException -\/ wyjatek w przypadku bledu zapisu
+
+Wczytywanie figur z pliku shapes -\/ lista figur filename -\/ nazwa pliku IOException -\/ wyjatek w przypadku bledu wczytania Class\+Not\+Found\+Exception -\/ wyjatek w przypadku bledu wczytania 
+\begin{DoxyParams}{Parameters}
+{\em shape} & -\/ figura\\
+\hline
+\end{DoxyParams}
+Ustawianie koloru, obrotu, pozostalych wlasciwosci i dodanie do panelu 
+\begin{DoxyParams}{Parameters}
+{\em color} & -\/ kolor figury \\
+\hline
+{\em shape\+Data} & -\/ informacje o figurze \\
+\hline
+{\em shape} & -\/ figura \\
+\hline
+{\em drawing\+Pane} & -\/ panel do rysowania \\
+\hline
+{\em slider} & -\/ slider do obrotu \\
+\hline
+{\em color\+Picker} & -\/ color\+Picker do zmiany koloru \\
+\hline
+{\em shape\+Data\+Map} & -\/ mapa przechowujaca informacje o figurach \\
+\hline
+{\em shapes} & -\/ lista przechowujaca informacje o figurach\\
+\hline
+\end{DoxyParams}
+Przyciski do rysowania figur 
+\begin{DoxyParams}{Parameters}
+{\em canvas} & -\/ plotno do rysowania \\
+\hline
+{\em drawing\+Pane} & -\/ panel do rysowania \\
+\hline
+{\em figure} & -\/ typ figury \\
+\hline
+{\em slider} & -\/ slider do obrotu \\
+\hline
+{\em color\+Picker} & -\/ color\+Picker do zmiany koloru\\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Main.\+java\end{DoxyCompactItemize}

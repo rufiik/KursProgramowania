@@ -42,9 +42,9 @@ public class Main extends Application {
     private List<ShapeData> shapes = new ArrayList<>(); 
     /**
      * rotateListener - Listener obrotu figury
-     * @param obs - obiekt obserwujacy
-     * @param oldVal - stara wartosc
-     * @param newVal - nowa wartosc
+     * obs - obiekt obserwujacy
+     * oldVal - stara wartosc
+     *  newVal - nowa wartosc
      */
     private ChangeListener<Number> rotateListener = (obs, oldVal, newVal) -> {
         if (selectedShape != null) {
@@ -61,17 +61,32 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage stage) {
-
+/**
+ * Ustawienia okna
+ * @param stage - okno
+ * @param przyciski - panel przyciskow
+ * @param button1 - przycisk do rysowania okregu
+ * @param button2 - przycisk do rysowania prostokata
+ * @param button3 - przycisk do rysowania trojkata
+ * @param info - przycisk informacji
+ * @param drawingPane - panel do rysowania
+ * @param canvas - plotno do rysowania
+ * @param root - panel glowny
+ * @param scene - scena
+ * @param slider - slider do obrotu
+ * @param colorPicker - colorPicker do zmiany koloru
+ * @param saveButton - przycisk zapisu
+ * @param loadButton - przycisk wczytania
+ * @param shape - figura
+ * @param shapeData - informacje o figurze
+ */
         stage.setTitle("Menu");
-        
-        // Panel z przyciskami
         HBox przyciski = new HBox();
         Button button1 = new Button("Okrag");
         Button button2 = new Button("Prostokat");
         Button button3 = new Button("Trojkat");
         Button info = new Button("Info");
         info.setOnAction(event -> {
-            // Tworzenie okna dialogowego z informacjami
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Informacje o programie");
             alert.setHeaderText("Nazwa: Prosty edytor graficzny \nPrzeznaczenie: Rysowanie figur \nAutor: Rafal Wochna 279752");
@@ -79,14 +94,11 @@ public class Main extends Application {
             alert.showAndWait();
         });
         przyciski.setPrefHeight(200);
-
         button1.setMinWidth(100);
         button2.setMinWidth(100);
         button3.setMinWidth(100);
         info.setMinWidth(100);
         przyciski.getChildren().addAll(button1, button2, button3, info);
-
-        // Płótno do rysowania figur
         Pane drawingPane = new Pane();
         Canvas canvas = new Canvas(1000,800);
         drawingPane.getChildren().add(canvas);
@@ -133,37 +145,31 @@ public class Main extends Application {
 
             /**
              * Zapisywanie figur do pliku
-             * @param shapes - lista figur
-             * @param filename - nazwa pliku
-             * @throws IOException - wyjatek w przypadku bledu zapisu
+             * filename - nazwa pliku
+             * IOException - wyjatek w przypadku bledu zapisu
              * 
              */
             try {
                 shapes.clear();
-
                 shapes.addAll(shapeDataMap.values());
                 ShapeIO.saveShapes(shapes, "shapes.dat");
             } catch (IOException e) {
                 System.err.println("Nie udalo sie zapisac figur: " + e);
             }
         });
-
         Button loadButton = new Button("Wczytaj");
         loadButton.setOnAction(event -> {
             /**
              * Wczytywanie figur z pliku
-             * @param shapes - lista figur
-             * @param filename - nazwa pliku
-             * @throws IOException - wyjatek w przypadku bledu wczytania
-             * @throws ClassNotFoundException - wyjatek w przypadku bledu wczytania
-             * @param figure - typ figury
+             * shapes - lista figur
+             * filename - nazwa pliku
+             * IOException - wyjatek w przypadku bledu wczytania
+             * ClassNotFoundException - wyjatek w przypadku bledu wczytania
              * @param shape - figura
              */
-            char figure='a';
             try {
                 shapes = ShapeIO.loadShapes("shapes.dat");
                  drawingPane.getChildren().clear();
-
                  if (!drawingPane.getChildren().contains(canvas)) {
                     drawingPane.getChildren().add(canvas);
                 }
@@ -244,9 +250,7 @@ public class Main extends Application {
      * @param figure - typ figury
      * @param slider - slider do obrotu
      * @param colorPicker - colorPicker do zmiany koloru
-     * @param shapeDataMap - mapa przechowujaca informacje o figurach
-     * @param shapes - lista przechowujaca informacje o figurach
-     * @param Node target - Gdzie naciska uzytkownik
+     * Node target - Gdzie naciska uzytkownik
      */
     private void plotno(Canvas canvas, Pane panel2, char figure, Slider slider, ColorPicker colorPicker) {
         panel2.setOnMouseClicked(e -> {
@@ -262,7 +266,7 @@ public class Main extends Application {
                     circle.setRadius(50);
                     panel2.getChildren().add(circle);
                     modify(circle, slider, colorPicker);
-                    // Dodaj informacje o kształcie do listy shapes
+                    //informacje o kształcie dodane do listy shapes
                     ShapeData shapeData=new ShapeData("Circle", circle.getTranslateX(), circle.getTranslateY(), colorPicker.getValue().getRed(), colorPicker.getValue().getGreen(), colorPicker.getValue().getBlue(), colorPicker.getValue().getOpacity(), 100, 100, 50, 0, 1, 1);
                     shapes.add(shapeData);
                     shapeDataMap.put(circle,shapeData);
@@ -276,7 +280,7 @@ public class Main extends Application {
                     rectangle.setStrokeWidth(5);
                     panel2.getChildren().add(rectangle);
                     modify(rectangle, slider, colorPicker);
-                    // Dodaj informacje o kształcie do listy shapes
+                    // informacje o kształcie dodane do listy shapes
                     ShapeData shapeData=new ShapeData("Rectangle", rectangle.getTranslateX(),rectangle.getTranslateY(), colorPicker.getValue().getRed(), colorPicker.getValue().getGreen(), colorPicker.getValue().getBlue(), colorPicker.getValue().getOpacity(), 150, 100, 0, 0, 1, 1);
                     shapes.add(shapeData);
                     shapeDataMap.put(rectangle,shapeData);
@@ -294,7 +298,7 @@ public class Main extends Application {
                     triangle.setStrokeWidth(5);
                     panel2.getChildren().add(triangle);
                     modify(triangle, slider, colorPicker);
-                    // Dodaj informacje o kształcie do listy shapes
+                    //informacje o kształcie dodane do listy shapes
                     ShapeData shapeData=new ShapeData("Polygon", triangle.getTranslateX(), triangle.getTranslateY(), colorPicker.getValue().getRed(), colorPicker.getValue().getGreen(), colorPicker.getValue().getBlue(), colorPicker.getValue().getOpacity(), 100, 100, 50, 0, 1, 1);
                     shapes.add(shapeData);
                     shapeDataMap.put(triangle,shapeData);
@@ -308,7 +312,6 @@ public class Main extends Application {
      * @param shape - figura
      * @param slider - slider do obrotu
      * @param colorPicker - colorPicker do zmiany koloru
-     * @param shapeDataMap - mapa przechowujaca informacje o figurach
      */
     private void modify(Shape shape, Slider slider, ColorPicker colorPicker) {
         /**
@@ -400,7 +403,7 @@ public class Main extends Application {
      * Zmiana rozmiaru figury za pomoca scrolla
      * @param shape - figura
      * @param event - zdarzenie
-     * @param ScrollEvent - zdarzenie scrolla
+     *ScrollEvent - zdarzenie scrolla
      * 
      */
     private void ScaleHandler(Shape shape, ScrollEvent event) {
@@ -433,21 +436,26 @@ public class Main extends Application {
     }
 
 /**
- * Klasa ShapeIO
- * @param shapes - lista figur
- * @param filename - nazwa pliku
- * @throws IOException - wyjatek w przypadku bledu zapisu
- * @throws IOException - wyjatek w przypadku bledu wczytania
- * @throws ClassNotFoundException - wyjatek w przypadku bledu wczytania
- * 
+ * ShapeIO - klasa do zapisywania i wczytywania figur
  */
 public class ShapeIO {
+/**
+ * saveShapes - zapisywanie figur do pliku
+ * @param filename - nazwa pliku
+ * @throws IOException - wyjatek w przypadku bledu zapisu
+ */
     public static void saveShapes(List<ShapeData> shapes, String filename) throws IOException {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename))) {
             out.writeObject(shapes);
         }
     }
-
+/**
+ * loadShapes - wczytywanie figur z pliku
+ * @param filename
+ * @return lista figur
+ * @throws IOException - wyjatek w przypadku bledu wczytania     
+ * @throws ClassNotFoundException - wyjatek w przypadku bledu wczytania  
+ */
     public static List<ShapeData> loadShapes(String filename) throws IOException, ClassNotFoundException {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename))) {
             return (List<ShapeData>) in.readObject();
@@ -457,7 +465,7 @@ public class ShapeIO {
 
 /**
  * Klasa main startujaca aplikacje
- * @param args
+ * @param args argumenty
  * 
  */
     public static void main(String args[]) {
