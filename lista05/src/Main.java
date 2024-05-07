@@ -1,8 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javafx.beans.value.ChangeListener;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -24,12 +22,10 @@ import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.geometry.Insets;
 import javafx.scene.control.Slider;
-
-
+import javafx.scene.layout.BorderPane;
 /**
  * Prosty edytor graficzny
  * @author Rafal Wochna 279752
- 
  */
 public class Main extends Application {
     /**
@@ -51,10 +47,6 @@ public class Main extends Application {
             selectedShape.setRotate(newVal.doubleValue());
         }
     };
-    /**
-     * shapeDataMap - mapa przechowujaca informacje o figurach (przydante do wczytywania figur z pliku)
-     */
-    Map<Shape, ShapeData> shapeDataMap = new HashMap<>();
     /**
      * start - funkcja inicjalizujaca okno
      * @param stage - okno
@@ -80,6 +72,7 @@ public class Main extends Application {
  * @param shape - figura
  * @param shapeData - informacje o figurze
  */
+
         stage.setTitle("Menu");
         HBox przyciski = new HBox();
         Button button1 = new Button("Okrag");
@@ -90,19 +83,27 @@ public class Main extends Application {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Informacje o programie");
             alert.setHeaderText("Nazwa: Prosty edytor graficzny \nPrzeznaczenie: Rysowanie figur \nAutor: Rafal Wochna 279752");
-            alert.setContentText("Instrukcja uzywania:\nNaciskajac figure w glownym oknie mozesz ja narysowac na plotnie\nNaciskajac figure na plotnie mozesz ja aktywowac tj. edytowac:\nprzesunac, zmienic rozmiar za pomoca scrolla lub obrocic ja ... \nMozesz takze zapisac figure do pliku oraz wczytac ja z pliku \nPod prawym przyciskiem mozesz zmienic kolor aktywnej figury");
+            alert.setContentText("Instrukcja uzywania:\nNaciskajac figure w glownym oknie mozesz ja narysowac na plotnie\nNaciskajac figure na plotnie mozesz ja aktywowac tj. edytowac:\nprzesunac, zmienic rozmiar za pomoca scrolla lub obrocic ja aktywujac i uzywajac scrolla \nMozesz takze zapisac figure do pliku oraz wczytac ja z pliku \nPod prawym przyciskiem mozesz zmienic kolor aktywnej figury");
             alert.showAndWait();
         });
-        przyciski.setPrefHeight(200);
+        
+        przyciski.setPrefHeight(25);
         button1.setMinWidth(100);
         button2.setMinWidth(100);
         button3.setMinWidth(100);
         info.setMinWidth(100);
         przyciski.getChildren().addAll(button1, button2, button3, info);
         Pane drawingPane = new Pane();
+        Rectangle clip = new Rectangle(1000, 800);
         Canvas canvas = new Canvas(1000,800);
+        clip.widthProperty().bind(canvas.widthProperty());
+clip.heightProperty().bind(canvas.heightProperty());
+// Set the clip on the drawingPane
+drawingPane.setClip(clip);
         drawingPane.getChildren().add(canvas);
-        VBox root = new VBox(przyciski, drawingPane);
+        BorderPane root = new BorderPane();
+        root.setTop(przyciski);
+        root.setCenter(drawingPane);
         Scene scene = new Scene(root, 1000, 800);
 /**
  * Listener do zmiany rozmiaru okna
@@ -150,8 +151,6 @@ public class Main extends Application {
              * 
              */
             try {
-                shapes.clear();
-                shapes.addAll(shapeDataMap.values());
                 ShapeIO.saveShapes(shapes, "shapes.dat");
             } catch (IOException e) {
                 System.err.println("Nie udalo sie zapisac figur: " + e);
@@ -168,8 +167,9 @@ public class Main extends Application {
              * @param shape - figura
              */
             try {
+                shapes.clear();
                 shapes = ShapeIO.loadShapes("shapes.dat");
-                 drawingPane.getChildren().clear();
+                drawingPane.getChildren().clear();
                  if (!drawingPane.getChildren().contains(canvas)) {
                     drawingPane.getChildren().add(canvas);
                 }
@@ -184,11 +184,12 @@ public class Main extends Application {
                         Polygon triangle = new Polygon();
                         triangle.getPoints().addAll(new Double[]{
                                 shapeData.getX(), shapeData.getY(),
-                                shapeData.getX() - shapeData.getRadius(), shapeData.getY() + 86.6,
-                                shapeData.getX() + shapeData.getRadius(), shapeData.getY() + 86.6
+                                shapeData.getX() - shapeData.getRadius(), shapeData.getY() + 86.0,
+                                shapeData.getX() + shapeData.getRadius(), shapeData.getY() + 86.0
                         });
                         shape = triangle;
                     }
+                    
                     /**
                      * Ustawianie koloru, obrotu, pozostalych wlasciwosci i dodanie do panelu
                      * @param color - kolor figury
@@ -197,7 +198,6 @@ public class Main extends Application {
                      * @param drawingPane - panel do rysowania
                      * @param slider - slider do obrotu
                      * @param colorPicker - colorPicker do zmiany koloru
-                     * @param shapeDataMap - mapa przechowujaca informacje o figurach
                      * @param shapes - lista przechowujaca informacje o figurach
                      * 
                      */
@@ -212,14 +212,18 @@ public class Main extends Application {
                         }
                         shape.setScaleX(shapeData.getScaleX());
                         shape.setScaleY(shapeData.getScaleY());
+                        
                         modify(shape, slider, colorPicker);
+                        
                     }
+                   
                 }
                
             } catch (IOException | ClassNotFoundException e) {
                 System.err.println("Nie udało się odczytać figur: " + e);
             }
         });
+        
         przyciski.getChildren().addAll(saveButton, loadButton);
 /**
  * Przyciski do rysowania figur
@@ -246,96 +250,124 @@ public class Main extends Application {
     /**
      * Funkcja rysujaca figury na plotnie
      * @param canvas - plotno do rysowania
-     * @param panel2 - panel do rysowania
+     * @param drawingPane - panel do rysowania
      * @param figure - typ figury
      * @param slider - slider do obrotu
      * @param colorPicker - colorPicker do zmiany koloru
      * Node target - Gdzie naciska uzytkownik
      */
-    private void plotno(Canvas canvas, Pane panel2, char figure, Slider slider, ColorPicker colorPicker) {
-        panel2.setOnMouseClicked(e -> {
+    private void plotno(Canvas canvas, Pane drawingPane, char figure, Slider slider, ColorPicker colorPicker) {
+        drawingPane.setOnMouseClicked(e -> {
             Node target = e.getPickResult().getIntersectedNode();
             if (target == canvas) {
                 if (figure == 'c') {
                     Circle circle = new Circle(0,0, 50);
+                    circle.setRadius(50);
+                    stroke(circle);
                     circle.setTranslateX(e.getX());
                     circle.setTranslateY(e.getY());
                     circle.setFill(colorPicker.getValue());
-                    circle.setStroke(Color.BLACK);
-                    circle.setStrokeWidth(5);
-                    circle.setRadius(50);
-                    panel2.getChildren().add(circle);
-                    modify(circle, slider, colorPicker);
+                    
+                    
                     //informacje o kształcie dodane do listy shapes
-                    ShapeData shapeData=new ShapeData("Circle", circle.getTranslateX(), circle.getTranslateY(), colorPicker.getValue().getRed(), colorPicker.getValue().getGreen(), colorPicker.getValue().getBlue(), colorPicker.getValue().getOpacity(), 100, 100, 50, 0, 1, 1);
+                    ShapeData shapeData=new ShapeData("Circle",circle.getTranslateX(), circle.getTranslateY(), circle.getBoundsInParent().getMinX(), circle.getBoundsInParent().getMaxX(),circle.getBoundsInParent().getMinY(),circle.getBoundsInParent().getMaxY(), colorPicker.getValue().getRed(), colorPicker.getValue().getGreen(), colorPicker.getValue().getBlue(), colorPicker.getValue().getOpacity(), 100, 100, 50, 0, 1, 1);
+                    shapeData.setWidth(circle.getBoundsInParent().getWidth());
+                    shapeData.setHeight(circle.getBoundsInParent().getHeight());
                     shapes.add(shapeData);
-                    shapeDataMap.put(circle,shapeData);
+                    drawingPane.getChildren().add(circle);
+                    // System.out.println(shapes+" "+shapeData);
+                    // System.out.println(shapeData==shapes.get(0)); 
+                    modify(circle, slider, colorPicker);
 
                 } else if (figure == 'r') {
                     Rectangle rectangle = new Rectangle(0,0, 150, 100);
+                    stroke(rectangle);
                     rectangle.setTranslateX(e.getX());
                     rectangle.setTranslateY(e.getY());
                     rectangle.setFill(colorPicker.getValue());
-                    rectangle.setStroke(Color.BLACK);
-                    rectangle.setStrokeWidth(5);
-                    panel2.getChildren().add(rectangle);
-                    modify(rectangle, slider, colorPicker);
+                
                     // informacje o kształcie dodane do listy shapes
-                    ShapeData shapeData=new ShapeData("Rectangle", rectangle.getTranslateX(),rectangle.getTranslateY(), colorPicker.getValue().getRed(), colorPicker.getValue().getGreen(), colorPicker.getValue().getBlue(), colorPicker.getValue().getOpacity(), 150, 100, 0, 0, 1, 1);
+                    ShapeData shapeData=new ShapeData("Rectangle",rectangle.getTranslateX(),rectangle.getTranslateY(), rectangle.getBoundsInParent().getMinX(), rectangle.getBoundsInParent().getMaxX(),rectangle.getBoundsInParent().getMinY(),rectangle.getBoundsInParent().getMaxY(), colorPicker.getValue().getRed(), colorPicker.getValue().getGreen(), colorPicker.getValue().getBlue(), colorPicker.getValue().getOpacity(), 100, 150, 50, 0, 1, 1); 
+                    shapeData.setWidth(rectangle.getBoundsInParent().getWidth());
+                    shapeData.setHeight(rectangle.getBoundsInParent().getHeight());
                     shapes.add(shapeData);
-                    shapeDataMap.put(rectangle,shapeData);
+                    drawingPane.getChildren().add(rectangle);
+                    modify(rectangle, slider, colorPicker);
                 } else if (figure == 't') {
                     Polygon triangle = new Polygon();
                     triangle.getPoints().addAll(new Double[]{
                             0.0,  0.0,
-                            -50.0,  86.6,
-                             50.0,  86.6
+                            -50.0,  86.0,
+                             50.0,  86.0
                     });
+                    stroke(triangle);
                     triangle.setTranslateX(e.getX());
                     triangle.setTranslateY(e.getY());
                     triangle.setFill(colorPicker.getValue());
-                    triangle.setStroke(Color.BLACK);
-                    triangle.setStrokeWidth(5);
-                    panel2.getChildren().add(triangle);
-                    modify(triangle, slider, colorPicker);
+                
                     //informacje o kształcie dodane do listy shapes
-                    ShapeData shapeData=new ShapeData("Polygon", triangle.getTranslateX(), triangle.getTranslateY(), colorPicker.getValue().getRed(), colorPicker.getValue().getGreen(), colorPicker.getValue().getBlue(), colorPicker.getValue().getOpacity(), 100, 100, 50, 0, 1, 1);
+                    ShapeData shapeData=new ShapeData("Polygon",triangle.getTranslateX(), triangle.getTranslateY(), triangle.getBoundsInParent().getMinX(), triangle.getBoundsInParent().getMaxX(),triangle.getBoundsInParent().getMinY(),triangle.getBoundsInParent().getMaxY(), colorPicker.getValue().getRed(), colorPicker.getValue().getGreen(), colorPicker.getValue().getBlue(), colorPicker.getValue().getOpacity(), 104, 89, 50, 0, 1, 1);
+                    shapeData.setWidth(triangle.getBoundsInParent().getWidth());
+                    shapeData.setHeight(triangle.getBoundsInParent().getHeight());
                     shapes.add(shapeData);
-                    shapeDataMap.put(triangle,shapeData);
+                    drawingPane.getChildren().add(triangle);
+                    modify(triangle, slider, colorPicker);
 
                 }
             }
     });
     }
     /**
+     * Funkcja ustawiajaca obramowke figury
+     * @param shape - figura
+     */
+
+    private void stroke(Shape shape){
+        shape.setStroke(Color.BLACK);
+        shape.setStrokeWidth(5);
+   }
+
+    /**
      * Funkcja modyfikujaca figury
      * @param shape - figura
      * @param slider - slider do obrotu
      * @param colorPicker - colorPicker do zmiany koloru
      */
+
     private void modify(Shape shape, Slider slider, ColorPicker colorPicker) {
         /**
          * Przesuwanie figury
          * @param deltaX - przesuniecie w osi X
          * @param deltaY - przesuniecie w osi Y
          * @param shapeData - informacje o figurze
-         * @param shapeDataMap - mapa przechowujaca informacje o figurach
-         * 
+         * shapes.get(i) - informacje o figurze
          */
+       
         shape.setOnMousePressed(e1 -> {
+            int j[]=new int[1];
+        for(int i=0;i<shapes.size();i++){
+            // System.out.println(shapes.get(i).getX()+ " "+shapes.get(i).getY() + " "+shapes.get(i).getWidth() + " "+shapes.get(i).getHeight());
+            // System.out.println(shape.getBoundsInParent().getWidth()+ " "+shape.getBoundsInParent().getHeight());
+            if((shape.getBoundsInParent().getMinX()<=shapes.get(i).getX() && shapes.get(i).getX()<=shape.getBoundsInParent().getMaxX()) && shapes.get(i).getWidth()==shape.getBoundsInParent().getWidth() && shapes.get(i).getHeight()==shape.getBoundsInParent().getHeight()){
+                     j[0]=i;
+            }
+        }
             double deltaX = e1.getSceneX() - shape.getTranslateX();
             double deltaY = e1.getSceneY() - shape.getTranslateY();
             shape.setOnMouseDragged(ev -> {
+                shapes.get(j[0]).setX(ev.getSceneX() - deltaX);
+                shapes.get(j[0]).setY(ev.getSceneY() - deltaY);
+                shapes.get(j[0]).setMinX(shape.getBoundsInParent().getMinX());
+                shapes.get(j[0]).setMaxX(shape.getBoundsInParent().getMaxX());
+                shapes.get(j[0]).setMinY(shape.getBoundsInParent().getMinY());
+                shapes.get(j[0]).setMaxY(shape.getBoundsInParent().getMaxY());
                 shape.setTranslateX(ev.getSceneX() - deltaX);
                 shape.setTranslateY(ev.getSceneY() - deltaY);
-                ShapeData shapeData = shapeDataMap.get(shape);
-                if (shapeData != null) {
-                shapeData.setX(ev.getSceneX() - deltaX);
-                shapeData.setY(ev.getSceneY() - deltaY);
-                }
-              
+   
             });
         });
+
+           
         /**
          * 
          * Obracanie figury
@@ -345,36 +377,35 @@ public class Main extends Application {
          * @param selectedShape - zmienna przechowujaca aktualnie zaznaczona figure
          * @param event,e - zdarzenia
          * @param shapeData - informacje o figurze
-         * @param shapeDataMap - mapa przechowujaca informacje o figurach
          * 
          */
+       
         shape.setOnMouseClicked(event -> {
+            
             if (event.getButton() == MouseButton.SECONDARY) {
-                selectedShape = shape;
-                slider.valueProperty().addListener((obs, oldVal, newVal) -> {
-                    if (selectedShape != null) {
-                        selectedShape.setRotate(newVal.doubleValue());
-                        ShapeData shapeData = shapeDataMap.get(selectedShape);
-                        if (shapeData != null) {
-                            shapeData.setRotation(newVal.doubleValue());
-                        }
-                    }
-                });
-                slider.valueProperty().addListener(rotateListener); // Dodaj nowe nasłuchiwanie
-                slider.valueProperty().setValue(0);
-                colorPicker.setOnAction(e -> {
-                    if (selectedShape != null) {
+                int j[]=new int[1];
+            for(int i=0;i<shapes.size();i++){
+                if((shape.getBoundsInParent().getMinX()<=shapes.get(i).getX() && shapes.get(i).getX()<=shape.getBoundsInParent().getMaxX()) && shapes.get(i).getWidth()==shape.getBoundsInParent().getWidth() && shapes.get(i).getHeight()==shape.getBoundsInParent().getHeight()){
+                         j[0]=i;
 
+                }
+            }
+                if (rotateListener != null) {
+                    slider.valueProperty().removeListener(rotateListener);
+                }
+                rotateListener = (obs, oldVal, newVal) -> {
+                    shape.setRotate(newVal.doubleValue());
+                    shapes.get(j[0]).setRotation(newVal.doubleValue());
+                };
+                slider.valueProperty().addListener(rotateListener);
+                colorPicker.setOnAction(e -> {
                         Color color = colorPicker.getValue();
-                        selectedShape.setFill(color);
-                        ShapeData shapeData = shapeDataMap.get(shape);
-                        if (shapeData != null) {
-                            shapeData.setRed(color.getRed());
-                            shapeData.setGreen(color.getGreen());
-                            shapeData.setBlue(color.getBlue());
-                            shapeData.setOpacity(color.getOpacity());
-                        }
-                    }
+                        shape.setFill(color);
+                        shapes.get(j[0]).setRed(color.getRed());
+                        shapes.get(j[0]).setGreen(color.getGreen());
+                        shapes.get(j[0]).setBlue(color.getBlue());
+                        shapes.get(j[0]).setOpacity(color.getOpacity());
+                    
                 });
 /**
  * 
@@ -382,16 +413,12 @@ public class Main extends Application {
  * @param shape - figura
  * @param e1 - zdarzenie
  * @param shapeData - informacje o figurze
- * @param shapeDataMap - mapa przechowujaca informacje o figurach
  * 
  */
         shape.setOnScroll(e1 -> {
             ScaleHandler(shape, e1);
-            ShapeData shapeData = shapeDataMap.get(shape);
-            if (shapeData != null) {
-                shapeData.setScaleX(shape.getScaleX());
-                shapeData.setScaleY(shape.getScaleY());
-            }
+            shapes.get(j[0]).setScaleX(shape.getScaleX());
+            shapes.get(j[0]).setScaleY(shape.getScaleY());
         });
         
     }
@@ -421,13 +448,13 @@ public class Main extends Application {
         /**
          * zmniejszanie i zwiekszanie figury
          */
-        if (deltaY < 0) { 
+        if (deltaY < 0 && deltaY!=0) { 
             scale = 1 / 1.1;
             if (shape.getScaleX() > minScale && shape.getScaleY() > minScale) {
                 shape.setScaleX(shape.getScaleX() * scale);
                 shape.setScaleY(shape.getScaleY() * scale);
             }
-        } else {
+        } else if(deltaY > 0 && deltaY!=0){
             if (shape.getScaleX() < maxScale && shape.getScaleY() < maxScale) {
                 shape.setScaleX(shape.getScaleX() * scale);
                 shape.setScaleY(shape.getScaleY() * scale);
@@ -438,7 +465,7 @@ public class Main extends Application {
 /**
  * ShapeIO - klasa do zapisywania i wczytywania figur
  */
-public class ShapeIO {
+public static class ShapeIO {
 /**
  * saveShapes - zapisywanie figur do pliku
  * @param filename - nazwa pliku
@@ -456,11 +483,24 @@ public class ShapeIO {
  * @throws IOException - wyjatek w przypadku bledu wczytania     
  * @throws ClassNotFoundException - wyjatek w przypadku bledu wczytania  
  */
-    public static List<ShapeData> loadShapes(String filename) throws IOException, ClassNotFoundException {
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename))) {
-            return (List<ShapeData>) in.readObject();
+public static List<ShapeData> loadShapes(String filename) throws IOException, ClassNotFoundException {
+    try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename))) {
+        Object obj = in.readObject();
+        if (obj instanceof List<?>) {
+            List<?> list = (List<?>) obj;
+            List<ShapeData> shapeDataList = new ArrayList<>();
+            for (Object item : list) {
+                if (item instanceof ShapeData) {
+                    shapeDataList.add((ShapeData) item);
+                } else {
+                    throw new InvalidObjectException("Expected List<ShapeData>");
+                }
+            }
+            return shapeDataList;
         }
     }
+    throw new InvalidObjectException("Expected List<ShapeData>");
+}
 }
 
 /**

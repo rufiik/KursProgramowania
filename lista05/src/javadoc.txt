@@ -1,1 +1,0 @@
-javadoc -top ”<p><i> Page top </i></p>” -encoding cp1250 -charset cp1250 -private *.java
