@@ -49,7 +49,6 @@ public class ShapeModifier {
        
         shape.setOnMousePressed(e1 -> {
             int j[]=new int[1];
-            System.out.println(shapes.size());
         for(int i=0;i<shapes.size();i++){
             // System.out.println(shapes.get(i).getX()+ " "+shapes.get(i).getY() + " "+shapes.get(i).getWidth() + " "+shapes.get(i).getHeight());
             // System.out.println(shape.getBoundsInParent().getWidth()+ " "+shape.getBoundsInParent().getHeight());

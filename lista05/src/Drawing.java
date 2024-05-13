@@ -10,13 +10,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import java.util.ArrayList;
 import java.util.List;
-
-
-
 /**
  * Klasa rysujaca figury na plotnie
  */
-
 public class Drawing{ 
     private List<ShapeData> shapes = new ArrayList<>();
     private Shape selectedShape = null;
