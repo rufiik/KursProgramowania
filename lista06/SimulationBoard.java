@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 public class SimulationBoard extends JPanel {
@@ -10,8 +8,8 @@ public class SimulationBoard extends JPanel {
     private final double p;
     private final int k;
     private final Field[][] board;
-    private final ExecutorService executor;
     private int CELL_SIZE;
+    
 
     public SimulationBoard(int n, int m, double p, int k, int CELL_SIZE) {
         this.n = n;
@@ -19,7 +17,6 @@ public class SimulationBoard extends JPanel {
         this.p = p;
         this.k = k;
         this.board = new Field[n][m];
-        this.executor = Executors.newFixedThreadPool(n * m);
         this.CELL_SIZE = CELL_SIZE;
         initializeBoard();
         addMouseListener(new MouseAdapter() {
@@ -34,7 +31,7 @@ public class SimulationBoard extends JPanel {
         });
     }
     public void startSimulation() {
-        new Timer(k, e -> repaint()).start();
+        new Timer(100, e -> repaint()).start();
     }
     @Override
     public Dimension getPreferredSize() {
@@ -44,7 +41,7 @@ public class SimulationBoard extends JPanel {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 board[i][j] = new Field(i * m + j, p, k, board, i, j);
-                executor.submit(board[i][j]);
+                new Thread(board[i][j]).start();
             }
         }
     }

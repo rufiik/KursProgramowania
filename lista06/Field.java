@@ -1,7 +1,6 @@
 import java.util.Random;
-import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
-
 public class Field implements Runnable {
     private final int id;
     private final double p;
@@ -11,9 +10,9 @@ public class Field implements Runnable {
     private final int row;
     private final int col;
     private static final Random random = new Random();
-    private static final Lock lock = new ReentrantLock();
+    private static final ReentrantLock lock = new ReentrantLock();
     public volatile boolean threadSuspended;
-
+    private final Condition condition = lock.newCondition();
     public Field(int id, double p, int k, Field[][] board, int row, int col) {
         this.id = id;
         this.p = p;
@@ -22,6 +21,7 @@ public class Field implements Runnable {
         this.board = board;
         this.row = row;
         this.col = col;
+
         this.threadSuspended = false;
     }
     public int getColor() {
@@ -35,29 +35,42 @@ public class Field implements Runnable {
     }
     @Override
     public void run() {
-        try {
-            while (true) {
-                int delay = (int) (0.5 * k + random.nextDouble() * k);
+        while (true) {
+            try {
+                long delay = (long)((random.nextDouble() + 0.5) * k);
                 Thread.sleep(delay);
-                
                 synchronized (this) {
                     while (threadSuspended) {
-                        wait(); // czekaj, dopóki wątek nie zostanie wznowiony
-                    }
-    
-                    if (random.nextDouble() < p) {
-                        color = random.nextInt(256 * 256 * 256);
-                    } else {
-                        int newColor = calculateAverageNeighborColor();
-                        color = newColor;
+                        wait();
                     }
                 }
+                if(!isThreadSuspended()){
+                    changeThreadColor();
+                }
+                Thread.yield();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        } 
+        }
     }
-    private int calculateAverageNeighborColor() {
+    private void changeThreadColor() {
+        synchronized (this.board) {
+        lock.lock();
+        try {
+            System.out.println("Starting: (" + this.row + "," + this.col + ")");
+            if (random.nextDouble() < p) {
+                color = random.nextInt(256 * 256 * 256);
+            } else {
+                calculateAverageNeighborColor();
+            }
+        } finally {
+            System.out.println("Ending: (" + this.row + "," + this.col + ")");
+            lock.unlock();
+        
+    }
+}
+}      
+    private void calculateAverageNeighborColor() {
         int[] neighbors = new int[4];
         int ilosc=0;
         if(!isThreadSuspendedAt((row - 1 + board.length) % board.length, col)){
@@ -82,19 +95,24 @@ public class Field implements Runnable {
             g += (neighborColor >> 8) & 0xFF;
             b += neighborColor & 0xFF;
         }
+       
         r /= ilosc;
         g /= ilosc;
         b /= ilosc;
-          if(ilosc==0){
-            System.out.println("Error: ilosc=0");
-        }
-        return (r << 16) | (g << 8) | b;
-      
+        if(ilosc!=0){
+        this.color= (r << 16) | (g << 8) | b;
     }
-    public synchronized void suspendThread() {
+    }
+    public void suspendThread() {
+        lock.lock();
+        try{
         System.out.println("Suspend: " + id);
         threadSuspended = !threadSuspended;
-        if (!threadSuspended)
-            notify();
+        if (!threadSuspended) {
+            condition.signal(); 
+        }
+    } finally {
+        lock.unlock();
     }
+}
 }
