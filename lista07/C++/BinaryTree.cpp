@@ -105,13 +105,13 @@ private:
         if (!node) return;
 
         space += 10;
-        drawRec(node->right, space);
+        drawRec(node->left, space);
 
         std::cout << std::endl;
         for (int i = 10; i < space; i++) std::cout << " ";
         std::cout << node->value << "\n";
 
-        drawRec(node->left, space);
+        drawRec(node->right, space);
     }
 
 public:

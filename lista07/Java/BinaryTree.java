@@ -132,14 +132,13 @@ public class BinaryTree<T extends Comparable<T>> implements Serializable {
      * @param space - dodatkowa ilość spacji
      * @param result - wynikowy ciąg znaków
      */
-    private void drawRec(TreeNode<T> node, int space, StringBuilder result) {
+    private void drawRec(TreeNode<T> node, int depth, StringBuilder result) {
         if (node == null) return;
-        space += 10;
-        drawRec(node.right, space, result);
-        for (int i = 10; i < space; i++)
-            result.append(" ");
-            result.append(node.value);
-            result.append("\n");
-            drawRec(node.left, space, result);
+        drawRec(node.left, depth + 1, result);
+        for (int i = 0; i < depth*4; i++)
+            result.append("  "); 
+        result.append(node.value);
+        result.append("\n \n");
+        drawRec(node.right, depth + 1, result);
     }
 }

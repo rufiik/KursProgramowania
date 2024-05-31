@@ -26,6 +26,8 @@ public class BinaryTreeClientGUI extends Application {
         Button searchButton = new Button("Szukaj"); // Utwórz przycisk do wyszukiwania wartości.
         Button drawButton = new Button("Rysuj"); // Utwórz przycisk do rysowania drzewa.
         TextArea outputArea = new TextArea(); // Utwórz obszar tekstowy dla wyników.
+        
+        outputArea.setPrefHeight(600);
         outputArea.setEditable(false); // Ustaw obszar tekstowy jako tylko do odczytu.
         // Ustaw akcję dla przycisku wstawiania.
         insertButton.setOnAction(e -> {
@@ -33,6 +35,7 @@ public class BinaryTreeClientGUI extends Application {
             String response = client.sendCommand("insert " + value);
             valueField.clear();
             outputArea.setText(response);
+             outputArea.setStyle("-fx-font-size: 15px;");
         });
         // Ustaw akcję dla przycisku usuwania.
         deleteButton.setOnAction(e -> {
@@ -40,6 +43,7 @@ public class BinaryTreeClientGUI extends Application {
             String response = client.sendCommand("delete " + value);
             valueField.clear();
             outputArea.setText(response);
+            outputArea.setStyle("-fx-font-size: 15px;");
         });
         // Ustaw akcję dla przycisku wyszukiwania.
         searchButton.setOnAction(e -> {
@@ -47,11 +51,13 @@ public class BinaryTreeClientGUI extends Application {
             String response = client.sendCommand("search " + value);
             valueField.clear();
             outputArea.setText(response);
+            outputArea.setStyle("-fx-font-size: 15px;");
         });
         // Ustaw akcję dla przycisku rysowania.
         drawButton.setOnAction(e -> {
             String treeStructure = client.sendCommand("draw");
             outputArea.setText(treeStructure);
+            outputArea.setStyle("-fx-font-size: 30px;");
         });
         // Ustaw akcję dla ComboBoxa typu drzewa.
         treeTypeComboBox.setOnAction(e -> {
@@ -61,7 +67,8 @@ public class BinaryTreeClientGUI extends Application {
         // Utwórz pionową skrzynkę dla komponentów GUI.
         VBox vbox = new VBox(10, treeTypeComboBox, valueField, insertButton, deleteButton, searchButton, drawButton, outputArea);
         vbox.setPadding(new Insets(10));
-        Scene scene = new Scene(vbox, 400, 400);
+        Scene scene = new Scene(vbox, 400, 800);
+        
         // Ustaw scenę dla głównego etapu.
         primaryStage.setScene(scene);
         primaryStage.setTitle("Klient Drzewa Binarnego");
