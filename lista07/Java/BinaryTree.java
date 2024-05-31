@@ -1,44 +1,43 @@
-/* File: BinaryTree.java
-* @author : Rafał Wochna 279752
+/* Plik: BinaryTree.java
+* Autor: Rafał Wochna 279752
 */
-
 import java.io.Serializable;
 /**
- * A binary tree.
- * @param <T> the type of the values in the tree
+ * Drzewo binarne.
+ * @param <T> typ wartości w drzewie
  */
 class TreeNode<T extends Comparable<T>> implements Serializable {
-    T value; // The value of the node.
-    TreeNode<T> left; /* The left child of the node.*/ 
-    TreeNode<T> right; /* The right child of the node.*/ 
+    T value; // Wartość węzła.
+    TreeNode<T> left; /* Lewe dziecko węzła.*/ 
+    TreeNode<T> right; /* Prawe dziecko węzła.*/ 
 
     TreeNode(T value) {
-        this.value = value; /* Set the value of the node.*/
-        this.left = null;
-        this.right = null;
-    }
+        this.value = value; /* Ustaw wartość węzła. */
+        this.left = null; /* Ustaw lewe dziecko na null. */
+        this.right = null; /* Ustaw prawe dziecko na null. */
+    } 
 }
 /**
- * A binary tree.
- * @param <T> the type of the values in the tree
+ * Drzewo binarne.
+ * @param <T> typ wartości w drzewie
  * @see TreeNode
  * @see Serializable
  * @see Comparable
  */
 public class BinaryTree<T extends Comparable<T>> implements Serializable {
-    private TreeNode<T> root; /* The root of the tree.*/
+    private TreeNode<T> root; /* Korzeń drzewa. */
 /**
- * Inserts a value into the tree.
- * @param value - the value to insert
+ * Wstawia wartość do drzewa.
+ * @param value - wartość do wstawienia
  */
     public void insert(T value) {
         root = insertRec(root, value);
     }
 /**
- * Inserts a value into the tree using recursion.
- * @param root - the root of the tree
- * @param value - the value to insert
- * @return the root of the tree
+ * Wstawia wartość do drzewa przy użyciu rekurencji.
+ * @param root - korzeń drzewa
+ * @param value - wartość do wstawienia
+ * @return korzeń drzewa
  */
     private TreeNode<T> insertRec(TreeNode<T> root, T value) {
         if (root == null) {
@@ -53,17 +52,17 @@ public class BinaryTree<T extends Comparable<T>> implements Serializable {
         return root;
     }
 /**
- * Deletes a value from the tree.
- * @param value - the value to delete
+ * Usuwa wartość z drzewa.
+ * @param value - wartość do usunięcia
  */
     public void delete(T value) {
         root = deleteRec(root, value);
     }
 /**
- * Deletes a value from the tree using recursion.
- * @param root - the root of the tree
- * @param value - the value to delete
- * @return the root of the tree
+ * Usuwa wartość z drzewa przy użyciu rekurencji.
+ * @param root - korzeń drzewa
+ * @param value - wartość do usunięcia
+ * @return korzeń drzewa
  */
     private TreeNode<T> deleteRec(TreeNode<T> root, T value) {
         if (root == null) return root;
@@ -83,9 +82,9 @@ public class BinaryTree<T extends Comparable<T>> implements Serializable {
         return root;
     }
 /**
- * Finds the minimum value in the tree.
- * @param root - the root of the tree
- * @return the minimum value in the tree
+ * Znajduje najmniejszą wartość w drzewie.
+ * @param root - korzeń drzewa
+ * @return najmniejsza wartość w drzewie
  */
     private T minValue(TreeNode<T> root) {
         T minVal = root.value;
@@ -96,18 +95,18 @@ public class BinaryTree<T extends Comparable<T>> implements Serializable {
         return minVal;
     }
 /**
- * Searches for a value in the tree.
- * @param value - the value to search for
- * @return true if the value is found, false otherwise
+ * Wyszukuje wartość w drzewie.
+ * @param value - wartość do wyszukania
+ * @return true, jeśli wartość zostanie znaleziona, false w przeciwnym razie
  */
     public boolean search(T value) {
         return searchRec(root, value) != null;
     }
 /**
- * Searches for a value in the tree using recursion.
- * @param root - the root of the tree
- * @param value - the value to search for
- * @return the node containing the value, or null if the value is not found
+ * Wyszukuje wartość w drzewie przy użyciu rekurencji.
+ * @param root - korzeń drzewa
+ * @param value - wartość do wyszukania
+ * @return węzeł zawierający wartość lub null, jeśli wartość nie zostanie znaleziona
  */
     private TreeNode<T> searchRec(TreeNode<T> root, T value) {
         if (root == null || root.value.equals(value)) {
@@ -119,8 +118,8 @@ public class BinaryTree<T extends Comparable<T>> implements Serializable {
         return searchRec(root.right, value);
     }
 /**
- * Draws the tree.
- * @return the tree as a string
+ * Rysuje drzewo.
+ * @return drzewo jako ciąg znaków
  */
     public String draw() {
         StringBuilder result = new StringBuilder();
@@ -128,10 +127,10 @@ public class BinaryTree<T extends Comparable<T>> implements Serializable {
         return result.toString();
     }
     /**
-     * Draws the tree using recursion.
-     * @param node - the current node
-     * @param space - the space to add
-     * @param result - the result string
+     * Rysuje drzewo przy użyciu rekurencji.
+     * @param node - bieżący węzeł
+     * @param space - dodatkowa ilość spacji
+     * @param result - wynikowy ciąg znaków
      */
     private void drawRec(TreeNode<T> node, int space, StringBuilder result) {
         if (node == null) return;

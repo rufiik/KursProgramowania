@@ -1,5 +1,5 @@
-// File: BinaryTree.cpp
-
+/* Plik: BinaryTree.cpp*/ 
+/*Autor: Rafal Wochna 279752*/
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -7,9 +7,8 @@
 #include <algorithm>
 
 /**
- * A generic binary tree node.
- *
- * @tparam T the type of value stored in the node
+ * Węzeł generycznego drzewa binarnego.
+ * @tparam T typ przechowywanej wartości w węźle
  */
 template <typename T>
 class TreeNode {
@@ -22,15 +21,22 @@ public:
 };
 
 /**
- * A generic binary tree implementation.
+ * Generyczna implementacja drzewa binarnego.
  *
- * @tparam T the type of value stored in the tree
+ * @tparam T typ przechowywanej wartości w drzewie
  */
 template <typename T>
 class BinaryTree {
 private:
     std::shared_ptr<TreeNode<T>> root;
 
+    /**
+     * Rekurencyjne wstawianie wartości do drzewa.
+     *
+     * @param node wskaźnik na aktualny węzeł
+     * @param value wartość do wstawienia
+     * @return wskaźnik na zaktualizowany węzeł
+     */
     std::shared_ptr<TreeNode<T>> insertRec(std::shared_ptr<TreeNode<T>> node, T value) {
         if (!node) return std::make_shared<TreeNode<T>>(value);
         if (value < node->value) node->left = insertRec(node->left, value);
@@ -38,6 +44,13 @@ private:
         return node;
     }
 
+    /**
+     * Rekurencyjne usuwanie wartości z drzewa.
+     *
+     * @param node wskaźnik na aktualny węzeł
+     * @param value wartość do usunięcia
+     * @return wskaźnik na zaktualizowany węzeł
+     */
     std::shared_ptr<TreeNode<T>> deleteRec(std::shared_ptr<TreeNode<T>> node, T value) {
         if (!node) return node;
 
@@ -53,6 +66,12 @@ private:
         return node;
     }
 
+    /**
+     * Znajdowanie minimalnej wartości w drzewie.
+     *
+     * @param node wskaźnik na aktualny węzeł
+     * @return minimalna wartość w drzewie
+     */
     T minValue(std::shared_ptr<TreeNode<T>> node) {
         T minVal = node->value;
         while (node->left) {
@@ -62,6 +81,13 @@ private:
         return minVal;
     }
 
+    /**
+     * Rekurencyjne wyszukiwanie wartości w drzewie.
+     *
+     * @param node wskaźnik na aktualny węzeł
+     * @param value wartość do wyszukania
+     * @return true, jeśli wartość została znaleziona; false w przeciwnym razie
+     */
     bool searchRec(std::shared_ptr<TreeNode<T>> node, T value) {
         if (!node) return false;
         if (node->value == value) return true;
@@ -69,6 +95,12 @@ private:
         return searchRec(node->right, value);
     }
 
+    /**
+     * Rekurencyjne rysowanie drzewa.
+     *
+     * @param node wskaźnik na aktualny węzeł
+     * @param space odstęp w rysowaniu
+     */
     void drawRec(std::shared_ptr<TreeNode<T>> node, int space) {
         if (!node) return;
 
@@ -83,18 +115,37 @@ private:
     }
 
 public:
+    /**
+     * Wstawianie wartości do drzewa.
+     *
+     * @param value wartość do wstawienia
+     */
     void insert(T value) {
         root = insertRec(root, value);
     }
 
+    /**
+     * Usuwanie wartości z drzewa.
+     *
+     * @param value wartość do usunięcia
+     */
     void deleteNode(T value) {
         root = deleteRec(root, value);
     }
 
+    /**
+     * Wyszukiwanie wartości w drzewie.
+     *
+     * @param value wartość do wyszukania
+     * @return true, jeśli wartość została znaleziona; false w przeciwnym razie
+     */
     bool search(T value) {
         return searchRec(root, value);
     }
 
+    /**
+     * Rysowanie drzewa.
+     */
     void draw() {
         drawRec(root, 0);
     }
@@ -127,13 +178,14 @@ int main() {
     stringTree.insert("O");
     stringTree.insert("R");
     stringTree.draw();
-     std::cout << "Drzewo po zmianach\n";
+    std::cout << "Drzewo po zmianach\n";
     stringTree.deleteNode("A");
     stringTree.deleteNode("R");
     stringTree.draw();
     stringTree.search("R") ? std::cout << "R istnieje\n" : std::cout << "R nie istnieje\n";
     stringTree.search("C") ? std::cout << "C istnieje\n" : std::cout << "C nie istnieje\n";
     std::cout << "\n";
+
     BinaryTree<double> doubleTree;
     doubleTree.insert(50.5);
     doubleTree.insert(30.3);
@@ -143,7 +195,7 @@ int main() {
     doubleTree.insert(60.4);
     doubleTree.insert(80.6);
     doubleTree.draw();
-     std::cout << "Drzewo po zmianach\n";
+    std::cout << "Drzewo po zmianach\n";
     doubleTree.deleteNode(20.1);
     doubleTree.deleteNode(60.4);
     doubleTree.draw();
