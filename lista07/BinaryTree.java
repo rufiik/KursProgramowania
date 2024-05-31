@@ -1,39 +1,45 @@
-// File: BinaryTree.java
+/* File: BinaryTree.java
+* @author : Rafał Wochna 279752
+*/
 
-import java.util.ArrayList;
-import java.util.List;
-
+import java.io.Serializable;
 /**
- * A generic binary tree node.
- *
- * @param <T> the type of value stored in the node
+ * A binary tree.
+ * @param <T> the type of the values in the tree
  */
-class TreeNode<T extends Comparable<T>> {
-    T value;
-    TreeNode<T> left;
-    TreeNode<T> right;
+class TreeNode<T extends Comparable<T>> implements Serializable {
+    T value; // The value of the node.
+    TreeNode<T> left; /* The left child of the node.*/ 
+    TreeNode<T> right; /* The right child of the node.*/ 
 
     TreeNode(T value) {
-        this.value = value;
+        this.value = value; /* Set the value of the node.*/
         this.left = null;
         this.right = null;
     }
 }
 /**
- * A generic binary tree implementation.
- *
- * @param <T> the type of value stored in the tree
+ * A binary tree.
+ * @param <T> the type of the values in the tree
+ * @see TreeNode
+ * @see Serializable
+ * @see Comparable
  */
-public class BinaryTree<T extends Comparable<T>> {
-    private TreeNode<T> root;
-    /**
-     * Inserts a value into the binary tree.
-     *
-     * @param value the value to insert
-     */
+public class BinaryTree<T extends Comparable<T>> implements Serializable {
+    private TreeNode<T> root; /* The root of the tree.*/
+/**
+ * Inserts a value into the tree.
+ * @param value - the value to insert
+ */
     public void insert(T value) {
         root = insertRec(root, value);
     }
+/**
+ * Inserts a value into the tree using recursion.
+ * @param root - the root of the tree
+ * @param value - the value to insert
+ * @return the root of the tree
+ */
     private TreeNode<T> insertRec(TreeNode<T> root, T value) {
         if (root == null) {
             root = new TreeNode<>(value);
@@ -46,16 +52,19 @@ public class BinaryTree<T extends Comparable<T>> {
         }
         return root;
     }
-
-    /**
-     * Deletes a value from the binary tree.
-     *
-     * @param value the value to delete
-     */
+/**
+ * Deletes a value from the tree.
+ * @param value - the value to delete
+ */
     public void delete(T value) {
         root = deleteRec(root, value);
     }
-
+/**
+ * Deletes a value from the tree using recursion.
+ * @param root - the root of the tree
+ * @param value - the value to delete
+ * @return the root of the tree
+ */
     private TreeNode<T> deleteRec(TreeNode<T> root, T value) {
         if (root == null) return root;
 
@@ -73,7 +82,11 @@ public class BinaryTree<T extends Comparable<T>> {
 
         return root;
     }
-
+/**
+ * Finds the minimum value in the tree.
+ * @param root - the root of the tree
+ * @return the minimum value in the tree
+ */
     private T minValue(TreeNode<T> root) {
         T minVal = root.value;
         while (root.left != null) {
@@ -82,17 +95,20 @@ public class BinaryTree<T extends Comparable<T>> {
         }
         return minVal;
     }
-
-    /**
-     * Searches for a value in the binary tree.
-     *
-     * @param value the value to search for
-     * @return true if the value is found, false otherwise
-     */
+/**
+ * Searches for a value in the tree.
+ * @param value - the value to search for
+ * @return true if the value is found, false otherwise
+ */
     public boolean search(T value) {
         return searchRec(root, value) != null;
     }
-
+/**
+ * Searches for a value in the tree using recursion.
+ * @param root - the root of the tree
+ * @param value - the value to search for
+ * @return the node containing the value, or null if the value is not found
+ */
     private TreeNode<T> searchRec(TreeNode<T> root, T value) {
         if (root == null || root.value.equals(value)) {
             return root;
@@ -102,58 +118,29 @@ public class BinaryTree<T extends Comparable<T>> {
         }
         return searchRec(root.right, value);
     }
-
+/**
+ * Draws the tree.
+ * @return the tree as a string
+ */
+    public String draw() {
+        StringBuilder result = new StringBuilder();
+        drawRec(root, 0, result);
+        return result.toString();
+    }
     /**
-     * Draws the binary tree to display its hierarchy.
+     * Draws the tree using recursion.
+     * @param node - the current node
+     * @param space - the space to add
+     * @param result - the result string
      */
-    public void draw() {
-        drawRec(root, 0);
-    }
-    
-    private void drawRec(TreeNode<T> node, int space) {
+    private void drawRec(TreeNode<T> node, int space, StringBuilder result) {
         if (node == null) return;
-    
         space += 10;
-    
-        drawRec(node.right, space);
-    
-        System.out.print("\n");
+        drawRec(node.right, space, result);
         for (int i = 10; i < space; i++)
-            System.out.print(" ");
-        System.out.println(node.value);
-    
-        drawRec(node.left, space);
-    }
-
-    public static void main(String[] args) {
-        BinaryTree<Integer> intTree = new BinaryTree<>();
-        intTree.insert(50);
-        intTree.insert(50);
-        intTree.insert(30);
-        intTree.insert(70);
-        intTree.insert(20);
-        intTree.insert(40);
-        intTree.insert(60);
-        intTree.insert(80);
-        intTree.draw();
-
-        BinaryTree<String> stringTree = new BinaryTree<>();
-        stringTree.insert("M");
-        stringTree.insert("B");
-        stringTree.insert("Q");
-        stringTree.insert("A");
-        stringTree.insert("C");
-        stringTree.insert("O");
-        stringTree.insert("R");
-        stringTree.draw();
-        BinaryTree<Double> doubleTree = new BinaryTree<>();
-        doubleTree.insert(50.0);
-        doubleTree.insert(30.0);
-        doubleTree.insert(70.0);
-        doubleTree.insert(20.0);
-        doubleTree.insert(40.0);
-        doubleTree.insert(60.0);
-        doubleTree.insert(80.0);
-        doubleTree.draw();
+            result.append(" ");
+            result.append(node.value);
+            result.append("\n");
+            drawRec(node.left, space, result);
     }
 }
